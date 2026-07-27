@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+probe: false
+source: https://www.infinitus.ai/security/
+url: https://app.vanta.com/infinitus/trust/5bc2tqp40tm8es46i01ikz
+trust_center: https://app.vanta.com/infinitus/trust/5bc2tqp40tm8es46i01ikz
+security_page: https://www.infinitus.ai/security/
+certifications:
+- SOC 2 Type II
+- HIPAA Business Associate
+- CCPA
+notes: >-
+  Infinitus is directly certified for SOC 2 Type II, operates as a HIPAA
+  Business Associate (signs BAAs), and is CCPA compliant. The platform is hosted
+  on Google Cloud Platform, whose inherited compliance posture includes ISO
+  27001, NIST 800-53, SOC 2, PCI DSS, HIPAA, and HITRUST CSF. Compliance
+  artifacts (SOC 2 report, etc.) are distributed via the Vanta-hosted trust
+  center under NDA.
+evidence:
+- source: https://www.infinitus.ai/security/
+  keywords: [soc 2 type ii, hipaa business associate, ccpa, trust center]
+- source: https://app.vanta.com/infinitus/trust/5bc2tqp40tm8es46i01ikz
+  kind: vanta-trust-center

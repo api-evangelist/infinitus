@@ -1,8 +1,28 @@
 aid: infinitus
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/infinitus.png
 name: Infinitus
-description: 'Infinitus is a company surfaced as a portfolio company of gv, kleiner-perkins and added
-  to the API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  Infinitus Systems is a safety-first healthcare voice AI platform that automates
+  outbound and inbound phone calls to patients, payors, and providers for clinical
+  and administrative tasks including benefit verification, prior authorization,
+  prescription follow-up, and patient engagement. Its products include AI Agents
+  (autonomous call handling), AI Copilots (human-assisted tools), Studio (a no-code
+  agent builder), and Lens (conversation analysis and real-time clinical risk
+  detection), backed by a healthcare knowledge graph. Benefit verification can be
+  invoked as individual or bulk requests through an API, and the platform offers a
+  Salesforce integration, though Infinitus does not publish a public developer
+  portal or OpenAPI. The company is backed by GV and Kleiner Perkins.
 url: https://raw.githubusercontent.com/api-evangelist/infinitus/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -13,10 +33,15 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
 - Ai
+- Healthcare
+- Voice AI
+- Benefit Verification
+- Prior Authorization
+- HIPAA
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -25,4 +50,31 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: http://infinitus.ai
+  url: https://www.infinitus.ai
+- type: Pricing
+  url: https://www.infinitus.ai/pricing/
+- type: Blog
+  url: https://www.infinitus.ai/blog/
+- type: Support
+  url: https://www.infinitus.ai/contact/
+- type: TermsOfService
+  url: https://www.infinitus.ai/terms/
+- type: PrivacyPolicy
+  url: https://www.infinitus.ai/privacy-policy/
+- type: Security
+  url: https://www.infinitus.ai/security/
+- type: Compliance
+  url: https://www.infinitus.ai/security/
+- type: TrustCenter
+  url: security/infinitus-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/infinitus-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/infinitus-domain-security.yml
+- type: LLMsTxt
+  url: llms/infinitus-llms.txt
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

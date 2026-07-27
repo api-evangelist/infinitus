@@ -1,0 +1,64 @@
+# Infinitus
+A safety-first healthcare voice AI platform that automates phone calls to patients, payors, and providers
+
+## Get a Demo
+[Get a Demo](https://www.infinitus.ai/contact)
+
+## Why Infinitus
+- [Why Infinitus](https://www.infinitus.ai/why-infinitus/)
+
+## Products
+- [Product Overview](https://www.infinitus.ai/product/)
+- [AI agents](https://www.infinitus.ai/product/ai-agents/)
+- [AI copilots](https://www.infinitus.ai/product/ai-copilots/)
+- [Demo Library](https://www.infinitus.ai/category/demo-library/)
+
+## Voice AI Platform
+- [Safety-first AI](https://www.infinitus.ai/safety-first-ai/)
+- [Model architecture](https://www.infinitus.ai/product/#model-architecture)
+- [Knowledge graph](https://www.infinitus.ai/product/#knowledge-graph)
+- [Integrations](https://www.infinitus.ai/product/#integrations)
+
+## Solutions
+- [Solutions](https://www.infinitus.ai/solutions/)
+- [Patients](https://www.infinitus.ai/solutions/patients)
+- [Payors](https://www.infinitus.ai/solutions/payors)
+- [Providers](https://www.infinitus.ai/solutions/providers)
+- [Benefit verification](https://www.infinitus.ai/solutions/benefit-verification/)
+- [Prior authorization](https://www.infinitus.ai/solutions/prior-authorization/)
+- [Prescription follow-up](https://www.infinitus.ai/solutions/prescription-follow-up/)
+- [Salesforce](https://www.infinitus.ai/solutions/salesforce/)
+
+## Who we serve
+- [Ambulatory surgery centers](https://www.infinitus.ai/solutions/ambulatory-surgery-centers/)
+- [Health systems](https://www.infinitus.ai/solutions/health-systems/)
+- [Labs + Diagnostics](https://www.infinitus.ai/solutions/labs-diagnostics/)
+- [Payor partnerships](https://www.infinitus.ai/solutions/payor-partners)
+- [Pharma + life sciences](https://www.infinitus.ai/solutions/pharmaceutical-life-sciences)
+- [Specialty pharmacies](https://www.infinitus.ai/solutions/specialty-pharmacies/)
+- [Salesforce users](https://www.infinitus.ai/solutions/salesforce)
+
+## Pricing
+- [Pricing](https://www.infinitus.ai/pricing/)
+
+## Company
+- [Company](https://www.infinitus.ai/company/)
+- [About us](https://www.infinitus.ai/company/about-us/)
+- [Careers](https://www.infinitus.ai/careers/)
+- [Infinitus upcoming events](https://www.infinitus.ai/upcoming-events/)
+- [Newsroom](https://www.infinitus.ai/newsroom/)
+- [Contact us](https://www.infinitus.ai/contact/)
+- [Security](https://www.infinitus.ai/security/)
+
+## Resources
+- [Resources](https://www.infinitus.ai/resources)
+- [Blog](https://www.infinitus.ai/blog/)
+- [Resource center](https://www.infinitus.ai/resources/)
+- [Events + webinars](https://www.infinitus.ai/category/events-webinars/)
+- [Success stories](https://www.infinitus.ai/success-stories/)
+- [Agentic healthcare communications](https://www.infinitus.ai/agentic-healthcare-communications/)
+
+## Featured Content
+- [Watch now: Evaluating voice AI agent platforms](https://www.infinitus.ai/webinars/evaluating-ai-agents-copilots/)
+- [Ebook: The direct-to-patient playbook](https://www.infinitus.ai/resources/direct-to-patient-ai/)
+- [Agentic healthcare communications](https://www.infinitus.ai/agentic-healthcare-communications/)
