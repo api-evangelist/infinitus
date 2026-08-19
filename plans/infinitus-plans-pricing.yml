@@ -1,0 +1,59 @@
+generated: '2026-08-15'
+method: searched
+source: https://www.infinitus.ai/pricing/
+note: >-
+  Infinitus publishes a pricing PAGE but no rate card. There are no named tiers,
+  no dollar figures, no quotas and no calculator — pricing is quoted by sales per
+  customer. What the page does publish is the pricing MODEL and its billing
+  units, captured below. plan_count is 0 because zero purchasable plans are
+  enumerated, not because the page was unreadable.
+
+plan_count: 0
+pricing_page: https://www.infinitus.ai/pricing/
+public_rate_card: false
+self_serve: false
+free_tier: false
+trial: false
+calculator: false
+contact_required: true
+contact_url: https://www.infinitus.ai/contact/
+
+pricing_model:
+  type: custom-enterprise
+  quote: 'multiple pricing options depending on product(s), volume, and customer needs'
+  structures:
+  - name: platform-and-license-plus-usage
+    description: >-
+      An annual platform and license fee combined with usage charges billed per
+      task or per minute.
+    billing_period: annual
+    usage_units: [per-task, per-minute]
+  - name: subscription
+    description: Subscription-model option.
+  discounts:
+    quote: >-
+      Discounted task rates are available to customers who agree to multi-year
+      contracts and monthly minimums.
+    conditions: [multi-year contract, monthly minimum commitment]
+
+products_priced:
+- name: AI Agents
+  description: End-to-end automation of clinical and administrative calls.
+- name: AI Copilot
+  description: AI-assisted phone calls for employee productivity.
+
+api_access:
+  included_in_plan: unknown
+  note: >-
+    The pricing page does not state whether API access is metered separately or
+    bundled. Infinitus' marketing describes task submission "in bulk via their
+    portal or automatically by API", implying API access accompanies the platform
+    license, but no published pricing document confirms this. Recorded as unknown.
+
+plans: []
+
+x-evidence:
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/pricing/
+  http_status: 200
+  detail: pricing page reachable and readable; no tiers or prices enumerated

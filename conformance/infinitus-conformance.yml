@@ -1,0 +1,145 @@
+generated: '2026-08-15'
+method: searched
+source: >-
+  https://www.infinitus.ai/security/ +
+  https://support.infinitus.ai/ikb/ai-agent-security-guide.md +
+  live /.well-known probes of www.infinitus.ai
+note: >-
+  Assertions below are split between the OAuth/MCP surface on www.infinitus.ai
+  (where conformance is directly observable from served documents) and the
+  healthcare product API on api.infinitusai.com (where nothing is observable
+  because every endpoint is gated and no spec is published). Where a standard
+  could not be checked it is recorded as unknown, not as false.
+
+standards:
+
+- id: oauth2
+  conforms: true
+  evidence: >-
+    RFC 6749 authorization_code + refresh_token grants advertised at
+    https://www.infinitus.ai/.well-known/oauth-authorization-server, with live
+    authorize/token/revoke endpoints.
+
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: >-
+    /.well-known/oauth-authorization-server returns HTTP 200 application/json
+    with issuer, authorization_endpoint, token_endpoint, response_types_supported.
+
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: true
+  evidence: >-
+    /.well-known/oauth-protected-resource returns HTTP 200 application/json with
+    resource + authorization_servers, and the MCP endpoint's 401 carries a
+    matching WWW-Authenticate Bearer challenge with resource_metadata=.
+
+- id: rfc7636-pkce
+  conforms: true
+  evidence: >-
+    code_challenge_methods_supported ["S256"] with
+    token_endpoint_auth_methods_supported ["none"] — PKCE is the sole client
+    protection, as required for public clients.
+
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: bearer_methods_supported ["header"]; 401 returns a Bearer challenge.
+
+- id: mcp
+  conforms: true
+  evidence: >-
+    Live MCP server at https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+    responding to JSON-RPC POSTs with an MCP-specific error envelope
+    ({"code":"mcp_unauthorized"}). Protocol version could not be read — gated.
+  scope_note: >-
+    WordPress marketing-site MCP, not the voice-AI product API. See mcp/.
+
+- id: oidc
+  conforms: true
+  evidence: >-
+    Customer portal supports Google Workspace and Microsoft Azure AD / Entra ID
+    OAuth/SSO sign-in per the AI Agent Security Guide. Infinitus is the relying
+    party here, not an OIDC provider — it serves no
+    /.well-known/openid-configuration (404 on every host).
+
+- id: saml2
+  conforms: true
+  partial: true
+  evidence: >-
+    'SSO option to sign in with SAML. Note: we currently only support SP
+    (service provider) initiated flow' — SP-initiated only; IdP-initiated
+    unsupported.
+
+- id: hipaa
+  conforms: true
+  evidence: >-
+    Infinitus operates as a HIPAA Business Associate and signs BAAs
+    (https://www.infinitus.ai/security/). Captured in
+    security/infinitus-trust-center.yml.
+
+- id: soc2-type-ii
+  conforms: true
+  evidence: >-
+    SOC 2 Type II certified; report distributed under NDA via the Vanta trust
+    center. See security/infinitus-trust-center.yml.
+
+- id: ccpa
+  conforms: true
+  evidence: CCPA compliance stated at https://www.infinitus.ai/security/.
+
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on www.infinitus.ai,
+    api.infinitusai.com and support.infinitus.ai. A security contact
+    (security@infinitus.ai) is published as prose on the security page only.
+
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json return 404 on every
+    Infinitus host. The 200s on customer.infinitusai.com are SPA catch-all HTML,
+    not agent cards.
+
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI/Swagger document found on any host after probing /openapi.json,
+    /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs, /redoc
+    against www.infinitus.ai, api.infinitusai.com, customer.infinitusai.com and
+    support.infinitus.ai.
+
+- id: graphql
+  conforms: unknown
+  evidence: >-
+    https://api.infinitusai.com/graphql exists and returns HTTP 401
+    "Unauthorized" to both GET and an introspection POST. A GraphQL surface is
+    therefore confirmed present but its SDL is auth-gated and was NOT captured.
+
+- id: fhir-r4
+  conforms: unknown
+  evidence: >-
+    A third-party MuleSoft Exchange asset ("infinitus-sf-fhir-template",
+    published under org.mule.examples — MuleSoft's org, NOT Infinitus') pairs
+    Infinitus with Salesforce Health/Life Sciences Cloud FHIR objects. That is a
+    partner integration template, not an Infinitus conformance claim, and
+    Infinitus publishes no FHIR statement of its own. Recorded as unknown.
+
+- id: rfc9457-problem-details
+  conforms: unknown
+  evidence: >-
+    No error reference is published and every endpoint is gated. Observed 401s
+    return bare text/plain "Unauthorized" (api.infinitusai.com) or a bespoke
+    JSON envelope {"code","message","data":{"status"}} (WordPress MCP) — neither
+    is application/problem+json, but neither is a documented error contract.
+
+- id: rfc8594-sunset-header
+  conforms: unknown
+  evidence: No deprecation policy or Sunset/Deprecation header documentation found.
+
+summary:
+  asserted_true: 11
+  asserted_false: 3
+  unknown: 4
+  compliance_program_published: true
+  compliance_certifications: [SOC 2 Type II, HIPAA Business Associate, CCPA]
+  machine_readable_contract: false

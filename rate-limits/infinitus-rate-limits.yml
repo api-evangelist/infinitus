@@ -1,0 +1,57 @@
+generated: '2026-08-15'
+method: searched
+source: >-
+  https://support.infinitus.ai/ (public knowledge base) +
+  https://www.infinitus.ai/pricing/ + live probes of api.infinitusai.com
+note: >-
+  An honest zero. Infinitus publishes no developer documentation, so there is no
+  rate-limit reference to read. The public knowledge base (19 pages, all
+  end-user oriented) contains no API section. Rate-limit response headers could
+  not be observed either: every endpoint on api.infinitusai.com returns 401
+  before any limit is evaluated, and those 401 responses carry no X-RateLimit-*,
+  RateLimit-* or Retry-After headers.
+
+limit_count: 0
+documented: false
+docs: null
+headers_observed: []
+headers_documented: []
+exhaustion_status_code: unknown
+retry_after: unknown
+burst: unknown
+
+limits: []
+
+commercial_throttle:
+  note: >-
+    The nearest published constraint is commercial rather than technical:
+    pricing is charged per task or per minute, and discounted rates require
+    "monthly minimums" (https://www.infinitus.ai/pricing/). Volume is governed by
+    contract, not by a published API quota. This is NOT a rate limit and is not
+    counted in limit_count.
+
+gaps:
+- gap: no-developer-docs
+  detail: >-
+    Infinitus operates no developer portal. support.infinitus.ai is an end-user
+    knowledge base covering AI Agent and FastTrack product usage; it has no API
+    reference in which limits would be published.
+- gap: headers-unobservable
+  detail: >-
+    GET https://api.infinitusai.com/v1/tasks and POST /graphql both return 401
+    with a bare text/plain body and no rate-limit headers, so no runtime signal
+    could be captured anonymously.
+
+x-evidence:
+- fetched: '2026-08-15'
+  url: https://api.infinitusai.com/v1/tasks
+  http_status: 401
+  detail: no X-RateLimit-*, RateLimit-* or Retry-After headers present
+- fetched: '2026-08-15'
+  url: https://api.infinitusai.com/graphql
+  http_status: 401
+  detail: no rate-limit headers present
+- fetched: '2026-08-15'
+  url: https://support.infinitus.ai/llms.txt
+  http_status: 200
+  detail: full knowledge-base index; contains no API or rate-limit page

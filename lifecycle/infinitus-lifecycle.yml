@@ -1,0 +1,88 @@
+generated: '2026-08-15'
+method: searched
+source: >-
+  https://support.infinitus.ai/ + https://www.infinitus.ai/ + live probes
+note: >-
+  Largely a record of absences, each one probed. Infinitus runs a versioned API
+  path (/v1/) but publishes no versioning policy, no deprecation policy, no
+  status page and no SLA. The one lifecycle-adjacent surface it does run is a
+  pair of product-update pages in the customer knowledge base, and those pages
+  render no dated entries publicly.
+
+versioning:
+  scheme: uri-path
+  current: v1
+  evidence: >-
+    https://api.infinitusai.com/v1/tasks returns 401 (authenticated resource),
+    confirming a /v1/ path segment. Sibling paths /api, /api/v1 and /v1 itself
+    return 404.
+  policy_url: null
+  policy_published: false
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: unknown
+  deprecation_header: unknown
+  note: >-
+    No deprecation or sunset policy found. RFC 8594 header support could not be
+    observed because all endpoints 401 before returning resource headers.
+
+sla:
+  url: null
+  published: false
+  uptime_target: null
+  note: >-
+    No public SLA. Uptime commitments are presumably contractual — Infinitus
+    sells enterprise agreements with annual platform fees — but nothing is
+    published.
+
+status_page: null
+status_page_published: false
+status_page_probes:
+- url: https://status.infinitus.ai/
+  status: NXDOMAIN
+- url: https://www.infinitus.ai/status/
+  status: 404
+
+changelog:
+  published: false
+  candidate_pages:
+  - url: https://support.infinitus.ai/ikb/customer-portal-updates.md
+    title: AI Agent Updates
+    status: 200
+    dated_entries: 0
+    note: >-
+      Page exists and is framed as release notes ("Stay up to date on the latest
+      AI Agent product updates") but renders an empty Updates section with no
+      dated entries in the public view. Not usable as a changelog.
+  - url: https://support.infinitus.ai/ikb/fasttrack-updates.md
+    title: FastTrack Updates
+    status: 200
+    dated_entries: 0
+    note: Same shape as above.
+  probes:
+  - url: https://www.infinitus.ai/changelog/
+    status: 404
+
+roadmap:
+  published: false
+  probes:
+  - url: https://www.infinitus.ai/roadmap/
+    status: 404
+
+deprecated_operations: []
+deprecated_operations_note: >-
+  No OpenAPI is published, so no deprecated operations could be derived.
+
+summary:
+  versioning_policy: false
+  deprecation_policy: false
+  status_page: false
+  sla: false
+  changelog: false
+  roadmap: false
+  note: >-
+    NO StatusPage and NO Deprecation pointer is emitted in apis.yml for this
+    provider — neither surface exists. Recording the absence here rather than
+    advertising a pointer to a file that documents a 404.

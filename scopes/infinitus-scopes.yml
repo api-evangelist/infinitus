@@ -1,0 +1,65 @@
+generated: '2026-08-15'
+method: probed
+source: https://www.infinitus.ai/.well-known/oauth-authorization-server
+note: >-
+  Not derived from OpenAPI — Infinitus publishes none. These scopes come from
+  the RFC 8414 Authorization Server Metadata document and the RFC 9728 Protected
+  Resource Metadata document that Infinitus serves at www.infinitus.ai. Exactly
+  one scope is advertised, and it governs the MCP server on the WordPress
+  marketing host — not the healthcare product API at api.infinitusai.com, which
+  publishes no scope reference at all.
+
+schemes:
+- name: infinitus-wordpress-oauth
+  source: https://www.infinitus.ai/.well-known/oauth-authorization-server
+  issuer: https://www.infinitus.ai
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.infinitus.ai/oauth/authorize
+    tokenUrl: https://www.infinitus.ai/oauth/token
+    revocationUrl: https://www.infinitus.ai/oauth/revoke
+    pkce: S256
+    scopes: [mcp]
+
+scopes:
+- scope: mcp
+  description: >-
+    Access the Model Context Protocol server at
+    https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server. The single scope
+    advertised in both scopes_supported arrays.
+  flows: [authorizationCode]
+  resource: https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+  sources:
+  - https://www.infinitus.ai/.well-known/oauth-authorization-server
+  - https://www.infinitus.ai/.well-known/oauth-protected-resource
+
+summary:
+  scope_count: 1
+  granularity: coarse
+  note: >-
+    A single all-or-nothing "mcp" scope. There is no read/write or per-resource
+    separation, so an agent granted this scope receives whatever the server
+    exposes in full. Recorded as measured.
+
+gaps:
+- gap: product-api-scopes-unpublished
+  detail: >-
+    api.infinitusai.com advertises no OAuth metadata (both
+    /.well-known/oauth-authorization-server and
+    /.well-known/oauth-protected-resource return 404), and no permissions
+    reference page exists in the public knowledge base. Portal authorization is
+    described only as role-based (RBAC) with no published role or scope list.
+
+x-evidence:
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/.well-known/oauth-authorization-server
+  http_status: 200
+  content_type: application/json
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/.well-known/oauth-protected-resource
+  http_status: 200
+  content_type: application/json
+- fetched: '2026-08-15'
+  url: https://api.infinitusai.com/.well-known/oauth-authorization-server
+  http_status: 404
+  kind: negative-probe

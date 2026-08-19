@@ -1,0 +1,126 @@
+generated: '2026-08-15'
+method: searched
+source: >-
+  https://support.infinitus.ai/ikb/ai-agent-security-guide.md +
+  live probes of api.infinitusai.com and www.infinitus.ai
+note: >-
+  Thin by necessity. Infinitus publishes no API reference, so the cross-cutting
+  semantics below are drawn from the one public engineering document it does
+  publish (the AI Agent Security Guide) plus what the live hosts reveal at the
+  edge. Fields that could not be established are recorded as unknown rather than
+  inferred from the domain. NO Idempotency pointer is emitted for this provider
+  — no idempotency contract is documented anywhere, and asserting one would be
+  fabrication.
+
+surfaces:
+  rest:
+    host: https://api.infinitusai.com
+    versioning: uri-path
+    version: v1
+    example_path: /v1/tasks
+    gated: true
+  graphql:
+    endpoint: https://api.infinitusai.com/graphql
+    gated: true
+    introspection: gated
+  mcp:
+    endpoint: https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+    gated: true
+    scope_note: WordPress marketing-site MCP, not the product API. See mcp/.
+
+authentication:
+  style: bearer-token (portal); oauth2-authorization-code + PKCE (MCP)
+  detail: See authentication/infinitus-authentication.yml
+  portal_session:
+    token: JWT ID token
+    lifetime_seconds: 3600
+    refresh: refresh token
+    inactivity_timeout_minutes: 15
+  api_credentials: unknown
+  api_credentials_note: >-
+    401 responses from api.infinitusai.com carry no WWW-Authenticate header, so
+    the scheme cannot be named without a customer account.
+
+idempotency:
+  supported: unknown
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    No idempotency key, header or retry contract is documented. This matters
+    more than usual here: the API triggers real outbound phone calls to payors,
+    so a duplicate submission has a real-world consequence rather than a
+    bookkeeping one. Recorded as an undocumented gap, not as absent support.
+
+pagination:
+  style: unknown
+  params: []
+  response_fields: []
+  note: No API reference published; no list response observable anonymously.
+
+versioning:
+  scheme: uri-path
+  current: v1
+  policy_published: false
+  detail: See lifecycle/infinitus-lifecycle.yml
+
+error_envelope:
+  documented: false
+  observed:
+  - surface: rest/graphql (api.infinitusai.com)
+    content_type: text/plain
+    body: Unauthorized
+    status: 401
+    note: Bare text, not a structured envelope.
+  - surface: mcp (www.infinitus.ai)
+    content_type: application/json
+    shape: '{"code": string, "message": string, "data": {"status": int}}'
+    example: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+    note: >-
+      WordPress REST error shape, not an Infinitus-designed contract, and not
+      RFC 9457 application/problem+json.
+  rfc9457: false
+
+rate_limit_signaling:
+  headers: []
+  documented: false
+  detail: See rate-limits/infinitus-rate-limits.yml
+
+request_tracing:
+  request_id_header: unknown
+  note: No request-id or correlation header documented or observed.
+
+metadata:
+  supported: unknown
+
+field_expansion:
+  supported: unknown
+
+network:
+  allowlist_required: true
+  hosts: [https://customer.infinitusai.com, https://api.infinitusai.com]
+  port: 443
+  source: https://support.infinitus.ai/ikb/ai-agent-security-guide.md
+  note: >-
+    A real integration convention worth recording: customers must allowlist both
+    hosts on TCP/443 before the portal or backend API will function.
+
+task_submission:
+  modes: [customer-portal-ui, csv-upload, api, salesforce-integration]
+  bulk: true
+  note: >-
+    Infinitus describes submitting benefit verifications individually or in bulk
+    via portal, CSV upload, or API, with results returned by API or in the
+    portal. Asynchronous by nature — an AI agent places a phone call, so results
+    are not returned inline with the request. The callback/polling mechanism is
+    not publicly documented.
+  async: true
+  result_delivery: unknown
+
+cross_references:
+  authentication: authentication/infinitus-authentication.yml
+  scopes: scopes/infinitus-scopes.yml
+  rate_limits: rate-limits/infinitus-rate-limits.yml
+  lifecycle: lifecycle/infinitus-lifecycle.yml
+  conformance: conformance/infinitus-conformance.yml
+  mcp: mcp/infinitus-mcp.yml

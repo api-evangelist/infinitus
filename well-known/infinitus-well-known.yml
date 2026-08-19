@@ -1,0 +1,122 @@
+generated: '2026-08-15'
+method: probed
+source: live GET of /.well-known/* on every Infinitus host
+note: >-
+  Two real RFC-defined discovery documents are served from www.infinitus.ai:
+  an RFC 8414 OAuth 2.0 Authorization Server Metadata document and an RFC 9728
+  OAuth 2.0 Protected Resource Metadata document. Both return application/json
+  and parse as real documents (not HTML shells). Together they advertise an MCP
+  server on the Infinitus WordPress host — the protected-resource document names
+  the resource URL explicitly. No security.txt, no OpenID Connect discovery, no
+  api-catalog and no ai-plugin.json are served on any host.
+  IMPORTANT NEGATIVE — customer.infinitusai.com answers HTTP 200 with the React
+  SPA index.html for EVERY /.well-known/* path probed. Those 200s are a
+  single-page-app catch-all, not documents, and are recorded here as misses.
+
+hosts:
+- host: https://www.infinitus.ai
+  role: marketing site + WordPress (WP Engine, behind Cloudflare)
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: infinitus-oauth-authorization-server.json
+    spec: RFC 8414
+    note: >-
+      issuer https://www.infinitus.ai; authorization_endpoint /oauth/authorize;
+      token_endpoint /oauth/token; revocation_endpoint /oauth/revoke;
+      response_types_supported [code]; grant_types_supported
+      [authorization_code, refresh_token]; code_challenge_methods_supported
+      [S256] (PKCE required); scopes_supported ["mcp"];
+      token_endpoint_auth_methods_supported ["none"] (public clients);
+      client_id_metadata_document_supported true.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: infinitus-oauth-protected-resource.json
+    spec: RFC 9728
+    note: >-
+      resource https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server;
+      authorization_servers [https://www.infinitus.ai];
+      bearer_methods_supported [header]; scopes_supported ["mcp"].
+      This is the document that discloses the MCP endpoint — see mcp/.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+
+- host: https://api.infinitusai.com
+  role: production API host (named by Infinitus' own knowledge base)
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+
+- host: https://customer.infinitusai.com
+  role: customer portal (React single-page app)
+  spa_catch_all: true
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    document: false
+    note: SPA catch-all — body is the React index.html, not a document. Treated as a miss.
+  - path: /.well-known/openid-configuration
+    status: 200
+    document: false
+    note: SPA catch-all — HTML body. Treated as a miss.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    document: false
+    note: SPA catch-all — HTML body. Treated as a miss.
+  - path: /.well-known/api-catalog
+    status: 200
+    document: false
+    note: SPA catch-all — HTML body. Treated as a miss.
+  - path: /.well-known/agent-card.json
+    status: 200
+    document: false
+    note: >-
+      SPA catch-all — HTML body, not an AgentCard. Explicitly NOT recorded as an
+      agent card; no a2a/ artifact was written for Infinitus.
+
+- host: https://support.infinitus.ai
+  role: public knowledge base (Confluence via K15t Scroll Viewport)
+  documents:
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    note: >-
+      Real llms.txt listing 19 knowledge-base pages, each with a .md twin
+      (e.g. /ikb/ai-agent-security-guide.md). Agent-readable docs surface.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+
+summary:
+  hosts_probed: 4
+  real_documents: 2
+  spa_false_positives: 5
+  security_txt: false
+  agent_card: false

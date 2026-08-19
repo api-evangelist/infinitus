@@ -1,0 +1,110 @@
+generated: '2026-08-15'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, rubygems.org, crates.io, api.github.com/orgs/infinitusai
+note: >-
+  A measured zero. Infinitus ships NO first-party client library on any public
+  package registry. This is not an unchecked gap — each registry below was
+  queried directly and returned 404. The company does operate a real GitHub
+  organization (github.com/infinitusai, "Infinitus Systems, Inc."), but all 8 of
+  its public repositories are FORKS of third-party projects with no Infinitus
+  client library among them. Consistent with the rest of the profile: the API is
+  customer-gated, so any SDK would be distributed under contract rather than
+  published.
+
+packages: []
+package_count: 0
+official_sdk_count: 0
+
+# No `SDKs` pointer is emitted in apis.yml. sdk_count reads that type, and
+# emitting it here would credit Infinitus with client libraries it does not ship.
+
+registry_probes:
+- registry: npm
+  queries: [infinitus, infinitusai, infinitus-api, '@infinitus/sdk']
+  status: 404
+  found: 0
+- registry: pypi
+  queries: [infinitus, infinitusai, infinitus-api]
+  status: 404
+  found: 0
+
+github_organization:
+  url: https://github.com/infinitusai
+  name: Infinitus Systems, Inc.
+  website: www.infinitus.ai
+  first_party: true
+  public_repos: 8
+  first_party_libraries: 0
+  all_forks: true
+  note: >-
+    Every public repo is a fork of an upstream project — these are vendored
+    dependencies and CI tooling, not products. Listed for provenance so a future
+    run does not re-investigate them as candidate SDKs.
+  repositories:
+  - name: react-chat-ui
+    fork: true
+    language: TypeScript
+    upstream_topic: React chat UI components
+    pushed: '2025-06-19'
+  - name: redux-firestore
+    fork: true
+    upstream_topic: Redux bindings for Firestore
+    pushed: '2020-01-02'
+  - name: json2csv
+    fork: true
+    language: Go
+    upstream_topic: JSON to CSV converter
+    pushed: '2024-07-22'
+  - name: go-fuzz
+    fork: true
+    upstream_topic: Randomized testing for Go
+    pushed: '2023-06-14'
+  - name: nexmo-go
+    fork: true
+    language: Go
+    upstream_topic: Vonage/Nexmo Go SDK (upstream deprecated and relocated)
+    pushed: '2025-05-29'
+  - name: deepgram-go-sdk
+    fork: true
+    language: Go
+    upstream_topic: Deepgram speech recognition Go SDK
+    pushed: '2025-01-17'
+    signal: >-
+      Corroborates the voice-AI stack — Deepgram ASR — but is a fork of
+      Deepgram's SDK, not an Infinitus product.
+  - name: agents
+    fork: true
+    upstream_topic: real-time multimodal AI agents framework (LiveKit Agents)
+    pushed: '2025-08-11'
+    signal: >-
+      Most recently active fork; corroborates real-time voice agent tooling.
+  - name: paths-filter
+    fork: true
+    language: TypeScript
+    upstream_topic: GitHub Action for path-based conditional CI
+    pushed: '2025-07-24'
+
+distribution:
+  model: contract-only
+  detail: >-
+    Integration is delivered through the customer portal, CSV upload, a
+    customer-gated API at api.infinitusai.com, and packaged partner integrations
+    (Salesforce Life Sciences Cloud / Health Cloud / Agentforce). No downloadable
+    client library is offered publicly.
+
+x-evidence:
+- fetched: '2026-08-15'
+  url: https://api.github.com/orgs/infinitusai
+  http_status: 200
+  detail: 'login infinitusai, name "Infinitus Systems, Inc.", blog www.infinitus.ai, public_repos 8'
+- fetched: '2026-08-15'
+  url: https://api.github.com/orgs/infinitusai/repos
+  http_status: 200
+  detail: all 8 repos have fork=true
+- fetched: '2026-08-15'
+  url: https://registry.npmjs.org/infinitus
+  http_status: 404
+- fetched: '2026-08-15'
+  url: https://pypi.org/pypi/infinitus/json
+  http_status: 404

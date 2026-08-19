@@ -1,0 +1,135 @@
+generated: '2026-08-15'
+method: searched
+source: https://support.infinitus.ai/ikb/ai-agent-security-guide.md
+docs: https://support.infinitus.ai/ikb/ai-agent-security-guide.md
+note: >-
+  Derived from no OpenAPI — Infinitus publishes no machine-readable spec. This
+  profile is SEARCHED from the provider's own public knowledge base (the AI Agent
+  Security Guide) plus the two RFC discovery documents served at
+  www.infinitus.ai/.well-known/. It describes two distinct authentication
+  surfaces that should not be conflated: (1) end-user sign-in to the Infinitus
+  customer portal, and (2) OAuth 2.0 for the MCP server on the WordPress
+  marketing host. The credential model for the backend REST/GraphQL API at
+  api.infinitusai.com is NOT publicly documented — see gaps below.
+
+summary:
+  types: [oauth2, openIdConnect, saml2, http]
+  api_key_in: []
+  oauth2_flows: [authorizationCode]
+  public_spec: false
+  surfaces: 2
+
+surfaces:
+
+- surface: customer-portal
+  name: Infinitus Customer Portal
+  url: https://customer.infinitusai.com
+  audience: end users (health systems, pharma, providers, payors)
+  source: https://support.infinitus.ai/ikb/ai-agent-security-guide.md
+  schemes:
+  - name: google-workspace-sso
+    type: oauth2
+    subtype: openIdConnect
+    provider: Google Workspace
+    quote: 'OAuth/SSO option to let users sign in with their corporate Google Workspace account'
+  - name: microsoft-entra-sso
+    type: oauth2
+    subtype: openIdConnect
+    provider: Microsoft Azure AD / Entra ID
+    quote: 'OAuth/SSO option to let users sign in with their corporate Microsoft Azure AD account'
+  - name: saml-sso
+    type: saml2
+    binding: SP-initiated only
+    quote: 'SSO option to sign in with SAML. Note: we currently only support SP (service provider) initiated flow'
+    limitation: IdP-initiated SAML is NOT supported.
+  - name: magic-link
+    type: passwordless
+    channel: email
+    note: Passwordless sign-in via emailed magic link.
+  session:
+    token_type: JWT
+    token_name: ID token
+    token_lifetime_seconds: 3600
+    refresh_token: true
+    quote: 'ID token (JWT) which expires after 1 hour and a refresh token to automatically update the ID token'
+    inactivity_timeout_minutes: 15
+    inactivity_note: Automatic sign-out after 15 minutes of inactivity.
+  authorization:
+    model: RBAC
+    quote: 'RBAC (role based access control) system to manage permissions'
+    detail: Org admins assign roles that determine user access levels.
+
+- surface: mcp-server
+  name: Infinitus WordPress MCP server
+  url: https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+  audience: MCP clients / agents
+  source: https://www.infinitus.ai/.well-known/oauth-authorization-server
+  schemes:
+  - name: oauth2-mcp
+    type: oauth2
+    flows:
+    - flow: authorizationCode
+      authorizationUrl: https://www.infinitus.ai/oauth/authorize
+      tokenUrl: https://www.infinitus.ai/oauth/token
+      revocationUrl: https://www.infinitus.ai/oauth/revoke
+      pkce: S256
+      pkce_required: true
+      scopes:
+        mcp: Access the Model Context Protocol server
+    client_auth: none
+    client_auth_note: >-
+      token_endpoint_auth_methods_supported is ["none"] — public clients only,
+      protected by PKCE (S256) rather than a client secret.
+    client_id_metadata_document_supported: true
+    bearer_methods_supported: [header]
+    discovery:
+      authorization_server_metadata: https://www.infinitus.ai/.well-known/oauth-authorization-server
+      protected_resource_metadata: https://www.infinitus.ai/.well-known/oauth-protected-resource
+
+network:
+  allowlist_required: true
+  quote: >-
+    whitelisting traffic to https://customer.infinitusai.com and
+    https://api.infinitusai.com on TCP port 443
+  hosts:
+  - https://customer.infinitusai.com
+  - https://api.infinitusai.com
+  port: 443
+  source: https://support.infinitus.ai/ikb/ai-agent-security-guide.md
+
+gaps:
+- gap: backend-api-credentials-undocumented
+  detail: >-
+    Infinitus' own security guide names https://api.infinitusai.com as the
+    backend API host, but publishes no credential model for it. Probes show
+    GET /v1/tasks -> 401 and POST /graphql -> 401, both returning a bare
+    text/plain "Unauthorized" with NO WWW-Authenticate header, so the scheme
+    (bearer JWT vs API key vs mTLS) cannot be determined without a customer
+    account. Recorded as unknown rather than guessed.
+- gap: no-securityschemes
+  detail: No OpenAPI is published, so no securitySchemes could be derived.
+- gap: no-scope-reference
+  detail: >-
+    No scopes/permissions reference page exists for the product API. The only
+    published OAuth scope anywhere on the Infinitus surface is "mcp" — see
+    scopes/infinitus-scopes.yml.
+
+x-evidence:
+- fetched: '2026-08-15'
+  url: https://support.infinitus.ai/ikb/ai-agent-security-guide.md
+  http_status: 200
+  kind: provider-knowledge-base
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/.well-known/oauth-authorization-server
+  http_status: 200
+  kind: rfc8414
+- fetched: '2026-08-15'
+  url: https://api.infinitusai.com/v1/tasks
+  http_status: 401
+  kind: negative-probe
+  detail: 'text/plain "Unauthorized", no WWW-Authenticate header'
+- fetched: '2026-08-15'
+  url: https://api.infinitusai.com/graphql
+  http_status: 401
+  kind: negative-probe
+  detail: 'introspection POST rejected: text/plain "Unauthorized"'

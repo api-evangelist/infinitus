@@ -1,0 +1,110 @@
+generated: '2026-08-15'
+method: probed
+status: published
+source: https://www.infinitus.ai/.well-known/oauth-protected-resource
+note: >-
+  DISCOVERED, NOT DERIVED. Infinitus serves an RFC 9728 OAuth Protected Resource
+  Metadata document that names an MCP endpoint on its own host. The endpoint was
+  then probed directly and answered with a proper MCP-aware 401 plus an RFC 9728
+  WWW-Authenticate challenge — which is what confirms it is a live MCP server
+  rather than a stray route. No tool list could be captured: every JSON-RPC
+  method (tools/list, initialize) requires an OAuth bearer token.
+
+  SCOPE CAVEAT — READ THIS BEFORE TRUSTING THE POINTER. These MCP servers run on
+  the Infinitus WordPress MARKETING site (www.infinitus.ai, WP Engine), not on
+  the healthcare product API. The public route index at /wp-json/mcp/ lists three
+  servers, one of them named "wpdatatables-mcp-server" — a WordPress plugin
+  server — which strongly indicates this surface exposes website/content data,
+  not benefit-verification or prior-authorization operations. The actual Infinitus
+  product API (api.infinitusai.com) exposes NO MCP endpoint: POST /mcp there
+  returns 404. Do not read this artifact as "Infinitus ships an MCP interface to
+  its voice-AI platform" — it does not, as of this probe.
+
+deployment:
+  mode: remote
+  endpoint: https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+  auth: oauth
+  verified: probed
+  install: null
+  package: null
+
+server:
+  name: infinitus-mcp-oauth-server
+  transport: http
+  url: https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+  host: www.infinitus.ai
+  platform: WordPress (MCP adapter)
+  methods: [POST, GET, DELETE]
+
+authorization:
+  spec: RFC 9728 (Protected Resource Metadata) + RFC 8414 (Authorization Server Metadata)
+  resource: https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+  authorization_servers:
+  - https://www.infinitus.ai
+  authorization_endpoint: https://www.infinitus.ai/oauth/authorize
+  token_endpoint: https://www.infinitus.ai/oauth/token
+  revocation_endpoint: https://www.infinitus.ai/oauth/revoke
+  grant_types: [authorization_code, refresh_token]
+  pkce: S256
+  bearer_methods_supported: [header]
+  scopes_supported: [mcp]
+  token_endpoint_auth_methods_supported: [none]
+  client_id_metadata_document_supported: true
+  dynamic_client_registration: false
+
+# Sibling MCP routes exposed on the same WordPress REST namespace.
+# Enumerated from the PUBLIC route index at /wp-json/mcp/ (HTTP 200).
+sibling_servers:
+- path: /wp-json/mcp/wpdatatables-mcp-server
+  methods: [POST, GET, DELETE]
+  probe_status: 401
+  probe_body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that."}'
+  note: wpDataTables WordPress plugin MCP server. Gated; not OAuth-advertised.
+- path: /wp-json/mcp/mcp-adapter-default-server
+  methods: [POST, GET, DELETE]
+  probe_status: not-probed
+  note: Default server of the WordPress MCP adapter.
+
+tools: []
+tools_note: >-
+  EMPTY BY MEASUREMENT, NOT BY OMISSION. tools/list returns HTTP 401
+  ("MCP authentication required"), so the real tool set and its inputSchemas
+  require an authenticated OAuth introspection we cannot perform anonymously.
+  No tool list is published in llms.txt or anywhere else on the Infinitus
+  surface, so there is nothing to fall back to. Tools were NOT guessed.
+
+x-evidence:
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/.well-known/oauth-protected-resource
+  http_status: 200
+  content_type: application/json
+  kind: rfc9728-protected-resource-metadata
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/.well-known/oauth-authorization-server
+  http_status: 200
+  content_type: application/json
+  kind: rfc8414-authorization-server-metadata
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/wp-json/mcp/
+  http_status: 200
+  content_type: application/json
+  kind: wordpress-rest-route-index
+  detail: lists 3 MCP servers
+- fetched: '2026-08-15'
+  url: https://www.infinitus.ai/wp-json/mcp/mcp-oauth-server
+  http_status: 401
+  method: 'POST tools/list'
+  content_type: application/json
+  www_authenticate: 'Bearer realm="https://www.infinitus.ai", resource_metadata="https://www.infinitus.ai/.well-known/oauth-protected-resource"'
+  detail: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+- fetched: '2026-08-15'
+  url: https://api.infinitusai.com/mcp
+  http_status: 404
+  method: 'POST tools/list'
+  kind: negative-probe
+  detail: the product API host serves no MCP endpoint
+- fetched: '2026-08-15'
+  url: https://registry.modelcontextprotocol.io/v0/servers?search=infinitus
+  http_status: 200
+  kind: negative-probe
+  detail: 'no Infinitus server published to the MCP registry (count: 0)'
