@@ -1,0 +1,29 @@
+# Front Door AI Index — infinitus — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: infinitus
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.infinitus.ai
+  final_host: www.infinitus.ai
+  ownership: own
+  owner: infinitus
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 8
+  host_score: 8
+  density: 3.0
+  words: 2666
+  tiers:
+    agentic: 3
+    core: 5
+    model: 0
+  ambiguous: 13
+  top_terms:
+    agent: 13
+    AI: 5
+    AI agent: 1
+    AI assistant: 1
+    agentic: 1
